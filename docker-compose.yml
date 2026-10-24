@@ -1,0 +1,27 @@
+services:
+  instabox-keepalive:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: instabox-keepalive:latest
+    container_name: instabox-keepalive
+    restart: unless-stopped
+    init: true
+    network_mode: bridge
+    environment:
+      INSTABOX_API_KEY: ${INSTABOX_API_KEY}
+      INSTABOX_MACHINE: all
+      INSTABOX_WAKE_TRIES: "6"
+      TZ: Asia/Shanghai
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
